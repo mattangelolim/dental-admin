@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { Button, Modal, TextField, Typography, Paper } from '@mui/material';
 import Header from "../components/Header"
+import axios from "axios"
 
 const AppointmentHistoryPage = () => {
-  // Dummy data for appointment history
-  const appointmentHistory = [
-    { id: 1, name: 'John Doe', contact: '123-456-7890', date: '2024-01-30', start_time: '10:00 AM', end_time: '11:00 AM', service: 'Dental Cleaning', tooth_name: 'Molar 1', additional_service: 'X-ray', status: 'Done' },
-    { id: 2, name: 'Jane Doe', contact: '987-654-3210', date: '2023-12-20', start_time: '2:00 PM', end_time: '3:00 PM', service: 'Tooth Extraction', tooth_name: 'Incisor', additional_service: 'Pain Relief', status: 'Approved' },
-    { id: 3, name: 'Bob Smith', contact: '555-123-4567', date: '2023-12-25', start_time: '11:30 AM', end_time: '12:30 PM', service: 'Orthodontic Consultation', tooth_name: 'N/A', additional_service: 'Braces Consultation', status: 'Declined' },
-    // Add more dummy data as needed
-  ];
+  const [appointmentHistory, setAppointmentHistory] = useState([]);
+
+  useEffect(() => {
+    // Fetch all appointments from the API
+    axios.get('http://localhost:9000/fetch/all/Appointments')
+      .then(response => {
+        setAppointmentHistory(response.data.allAppointments);
+      })
+      .catch(error => {
+        console.error('Error fetching appointment history:', error);
+      });
+  }, []);
 
   // Columns configuration for DataGrid
   const columns = [
@@ -21,7 +28,20 @@ const AppointmentHistoryPage = () => {
     { field: 'end_time', headerName: 'End Time', width: 120 },
     { field: 'service', headerName: 'Service', width: 200 },
     { field: 'tooth_name', headerName: 'Tooth Name', width: 120 },
-    { field: 'additional_service', headerName: 'Additional Service', width: 200 },
+    {
+      field: 'additional_service',
+      headerName: 'Additional Service',
+      width: 200,
+      renderCell: (params) => (
+          <div>
+              {params.row.AdditionalServices.map(service => (
+                  <div key={service.service_description}>
+                      {service.service_description}
+                  </div>
+              ))}
+          </div>
+      )
+  },
     { field: 'status', headerName: 'Status', width: 120 },
   ];
 
@@ -29,10 +49,12 @@ const AppointmentHistoryPage = () => {
   const calculateStatus = (date, status) => {
     const currentDate = new Date();
     const appointmentDate = new Date(date);
-    if (appointmentDate < currentDate && status !== 'Declined') {
+    if (appointmentDate < currentDate && status !== 2) {
       return 'Done';
-    } else if (status === 'Declined') {
+    } else if (status === 1) {
       return 'Declined';
+    } else if (status === 0) {
+      return 'Pending'
     } else {
       return 'Approved'
     }
@@ -47,14 +69,18 @@ const AppointmentHistoryPage = () => {
   return (
     <div>
       <Header />
-      <div className='bg-white mt-2'>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5, 10, 20]}
-          checkboxSelection
-        />
+      <div className='bg-white mt-2 p-4'>
+        <Typography variant="h5">Appointment Approvals</Typography>
+        <div className='mt-2'>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5, 10, 20]}
+            checkboxSelection
+          />
+        </div>
+
       </div>
     </div>
   );
