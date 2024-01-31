@@ -48,8 +48,10 @@ const AppointmentHistoryPage = () => {
   const calculateStatus = (date, status) => {
     const currentDate = new Date();
     const appointmentDate = new Date(date);
-    if (appointmentDate < currentDate && status !== 2) {
+    if (appointmentDate < currentDate && status !== 1 ) {
       return "Done";
+    } else if (appointmentDate === "2024-01-30" && status !== 1) {
+      return "Today"
     } else if (status === 1) {
       return "Declined";
     } else if (status === 0) {
