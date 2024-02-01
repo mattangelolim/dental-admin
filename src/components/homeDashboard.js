@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaUser, FaCalendarCheck, FaClock, FaCheckCircle } from 'react-icons/fa'
 import IconButton from "@mui/material/IconButton";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterDate from "./FilterDate";
@@ -10,6 +11,9 @@ const HomeDashboard = () => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [clientsData, setClientsData] = useState(0)
+  const [approvedData, setApprovedData] = useState(0)
+  const [pendingData, setPendingData] = useState(0)
+  const [todayData, setTodayData] = useState(0)
   const [lineChartData, setLineChartData] = useState({
     options: {
       chart: {
@@ -53,23 +57,22 @@ const HomeDashboard = () => {
         let servicesUrl = 'http://localhost:9000/top/services';
         let clientsUrl = 'http://localhost:9000/clients/count';
         let appointmentsUrl = 'http://localhost:9000/appointment/numbers';
+        let approvedAppointmentUrl = 'http://localhost:9000/approved/appointment/num';
+        let pendingAppointmentUrl = 'http://localhost:9000/pending/appointment/num';
+        let todayAppointmentUrl = 'http://localhost:9000/appointment/today'
 
         const startDateParamAppointment = fromDate ? fromDate : defaultStart;
         const endDateParamAppointment = toDate ? toDate : defaultEnd;
         appointmentsUrl += `?startDate=${startDateParamAppointment}&endDate=${endDateParamAppointment}`;
-
-        const startDateParamServices = fromDate ? fromDate : defaultStart;
-        const endDateParamServices = toDate ? toDate : defaultEnd;
-        servicesUrl += `?startDate=${startDateParamServices}&endDate=${endDateParamServices}`
-
-        const startDateParamClients = fromDate ? fromDate : defaultStart;
-        const endDateParamClients = toDate ? toDate : defaultEnd;
-        clientsUrl += `?startDate=${startDateParamClients}&endDate=${endDateParamClients}`;
+        servicesUrl += `?startDate=${startDateParamAppointment}&endDate=${endDateParamAppointment}`
+        clientsUrl += `?startDate=${startDateParamAppointment}&endDate=${endDateParamAppointment}`;
+        approvedAppointmentUrl += `?startDate=${startDateParamAppointment}&endDate=${endDateParamAppointment}`;
+        pendingAppointmentUrl += `?startDate=${startDateParamAppointment}&endDate=${endDateParamAppointment}`;
+        todayAppointmentUrl += `?startDate=${startDateParamAppointment}&endDate=${endDateParamAppointment}`;
 
         // Fetch appointments data
         const appointmentsResponse = await axios.get(appointmentsUrl);
         const appointmentsData = appointmentsResponse.data;
-        console.log(appointmentsData)
         generateLineChartData(appointmentsData);
 
         // Fetch services data
@@ -81,7 +84,17 @@ const HomeDashboard = () => {
         const clientsResponse = await axios.get(clientsUrl);
         const clientsDat = clientsResponse.data.users;
         setClientsData(clientsDat);
-        console.log(clientsDat)
+
+        const approvedResponse = await axios.get(approvedAppointmentUrl)
+        // console.log("check",  approvedResponse.data.count)
+        setApprovedData(approvedResponse.data.count)
+
+        const pendingResponse = await axios.get(pendingAppointmentUrl)
+        setPendingData(pendingResponse.data.count)
+
+        const todayResponse = await axios.get(todayAppointmentUrl)
+        setTodayData(todayResponse.data.count)
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -159,23 +172,43 @@ const HomeDashboard = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             {/* Sample Card 1 */}
             <div className="bg-white p-4 rounded-md shadow-md border-2">
-              <h2 className="text-lg font-semibold mb-4">Clients:</h2>
-              <p>{clientsData}</p>
+              <div className="flex items-center mb-2">
+                <FaUser className="text-blue-500 mr-2" />
+                <h2 className="text-lg font-semibold">Clients:</h2>
+              </div>
+              <div className="flex justify-center items-center">
+                <p className="text-2xl">{clientsData}</p><span className="text-sm text-gray-400 ml-4"> (no. of clients registered)</span>
+              </div>
             </div>
             {/* Sample Card 2 */}
             <div className="bg-white p-4 rounded-md shadow-md border-2">
-              <h2 className="text-lg font-semibold mb-4">Pending Appointments:</h2>
-              <p>This is another sample card. </p>
+              <div className="flex items-center mb-2">
+                <FaClock className="text-green-500 mr-2" />
+                <h2 className="text-lg font-semibold">Pending Appointments:</h2>
+              </div>
+              <div className="flex justify-center items-center">
+                <p className="text-2xl">{pendingData}</p><span className="text-sm text-gray-400 ml-4"> (no. of pending appointments)</span>
+              </div>
             </div>
-            {/* Sample Card 2 */}
+            {/* Sample Card 3 */}
             <div className="bg-white p-4 rounded-md shadow-md border-2">
-              <h2 className="text-lg font-semibold mb-4">Approved Appointments:</h2>
-              <p>This is another sample card. </p>
+              <div className="flex items-center mb-2">
+                <FaCalendarCheck className="text-purple-500 mr-2" />
+                <h2 className="text-lg font-semibold">Approved Appointments:</h2>
+              </div>
+              <div className="flex justify-center items-center">
+                <p className="text-2xl">{approvedData}</p><span className="text-sm text-gray-400 ml-4"> (no. of approved appointments)</span>
+              </div>
             </div>
-            {/* Sample Card 2 */}
+            {/* Sample Card 4 */}
             <div className="bg-white p-4 rounded-md shadow-md border-2">
-              <h2 className="text-lg font-semibold mb-4">Today's Appointment:</h2>
-              <p>This is another sample card. </p>
+              <div className="flex items-center mb-2">
+                <FaCheckCircle className="text-red-500 mr-2" />
+                <h2 className="text-lg font-semibold">Today's Appointment:</h2>
+              </div>
+              <div className="flex justify-center items-center">
+                <p className="text-2xl">{todayData}</p><span className="text-sm text-gray-400 ml-4"> (needed appointment/procedure to perform today)</span>
+              </div>
             </div>
             {/* Add more cards as needed */}
           </div>
