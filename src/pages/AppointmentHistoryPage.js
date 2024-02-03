@@ -48,10 +48,10 @@ const AppointmentHistoryPage = () => {
   const calculateStatus = (date, status) => {
     const currentDate = new Date();
     const appointmentDate = new Date(date);
-    if (appointmentDate < currentDate && status !== 1 ) {
+    if (appointmentDate < currentDate && status !== 1) {
       return "Done";
     } else if (appointmentDate === "2024-01-30" && status !== 1) {
-      return "Today"
+      return "Today";
     } else if (status === 1) {
       return "Declined";
     } else if (status === 0) {
@@ -68,14 +68,14 @@ const AppointmentHistoryPage = () => {
   }));
 
   return (
-    <div className="border-2 border-red-600 flex justify-center items-center bg-white shadow-inner p-2">
-      <div className="border-2 border-green-600 w-[75%] flex flex-col gap-4 justify-center items-center">
-        <div className="border-2 border-blue-600 w-full">
+    <div className=" flex justify-center items-center bg-white shadow-inner p-2">
+      <div className=" w-[75%] flex flex-col gap-4 justify-center items-center">
+        <div className=" w-full">
           <p className="text-2xl text-gray-800 font-[Poppins] font-bold">
             Appointment History
           </p>
         </div>
-        <div className="border-2 border-blue-600 w-full">
+        <div className=" w-full">
           <DataGrid
             rows={rows}
             columns={columns}

@@ -1,27 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import axios from "axios";
 
 const MyClientsPage = () => {
-  // Dummy data for list of clients with createdAt timestamp
-  const clients = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      phone: "123-456-7890",
-      address: "123 Main St",
-      createdAt: "2024-01-27T12:34:56Z",
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-      email: "jane@example.com",
-      phone: "987-654-3210",
-      address: "456 Oak St",
-      createdAt: "2024-01-28T08:45:30Z",
-    },
-    // Add more dummy data as needed
-  ];
+  const [userList, setUserList] = useState([]);
 
   // Columns configuration for DataGrid, including createdAt
   const columns = [
@@ -38,20 +20,36 @@ const MyClientsPage = () => {
     },
   ];
 
+  useEffect(() => {
+    const baseUrl = "http://localhost:9000/user/list";
+    const fetchAllUsers = async () => {
+      try {
+        const response = await axios.get(baseUrl); // Use await here
+        const result = response.data.allUsers;
+        setUserList(result);
+      } catch (error) {
+        console.error(error);
+        throw new Error("An error occurred while fetching all users.");
+      }
+    };
+
+    fetchAllUsers();
+  }, []);
+
   return (
-    <div className="border-2 border-red-600 flex justify-center items-center bg-white shadow-inner p-2">
-      <div className="border-2 border-green-600 w-[75%] flex flex-col gap-4 justify-center items-center">
-        <div className="border-2 border-blue-600 w-full">
+    <div className=" flex justify-center items-center bg-white shadow-inner p-2">
+      <div className=" w-[75%] flex flex-col gap-4 justify-center items-center">
+        <div className=" w-full">
           <p className="text-2xl text-gray-800 font-[Poppins] font-bold">
             Manage Clients
           </p>
         </div>
-        <div className="border-2 border-blue-600 w-full">
+        <div className=" w-full">
           <DataGrid
             slots={{
               toolbar: GridToolbar,
             }}
-            rows={clients}
+            rows={userList}
             columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5, 10, 20]}

@@ -41,6 +41,7 @@ function NavBar() {
     Cookies.set("token", "", { expires: new Date(0) });
     navigate("/");
     toast.success("Successfully logged out.");
+    window.location.reload();
   };
   //   E7238B
 
@@ -49,8 +50,8 @@ function NavBar() {
       <div className="navbar-container bg-[#182c34] py-2 flex justify-center items-center">
         <div className="w-[95%] font-['Poppins'] text-white ">
           <Toolbar disableGutters className="flex justify-center items-center">
-            <Box className="border-2 border-red-600 w-[80%] flex justify-between">
-              <div className="border-2 border-red-600 flex gap-10 justify-center items-center">
+            <Box className=" w-[80%] flex justify-between">
+              <div className=" flex gap-10 justify-center items-center">
                 {pages.map((page, index) => (
                   <div key={index} className="text-xl flex">
                     <Box

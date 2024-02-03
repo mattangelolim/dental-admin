@@ -65,14 +65,14 @@ const ApprovalPage = () => {
   };
 
   return (
-    <div className="border-2 border-red-600 flex justify-center items-center bg-white shadow-inner p-2">
-      <div className="border-2 border-green-600 w-[75%] flex flex-col gap-4 justify-center items-center">
-        <div className="border-2 border-blue-600 w-full">
+    <div className=" flex justify-center items-center bg-white shadow-inner p-2">
+      <div className=" w-[75%] flex flex-col gap-4 justify-center items-center">
+        <div className=" w-full">
           <p className="text-2xl text-gray-800 font-[Poppins] font-bold">
             Appointment Approvals
           </p>
         </div>
-        <div className="border-2 border-blue-600 w-full">
+        <div className=" w-full">
           <div className="flex flex-wrap -m-4">
             {appointments.map((appointment, index) => (
               <div key={index} className="w-1/3 p-4 ">
@@ -152,7 +152,7 @@ const ApprovalPage = () => {
           </div>
           {/* Modal for entering doctor's note */}
         </div>
-        <div className="border-2 border-blue-600 w-full">
+        <div className=" w-full">
           <Modal open={isModalOpen} onClose={handleModalClose}>
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-white shadow-md p-4">
               <Typography variant="h6" className="text-gray-800" gutterBottom>
