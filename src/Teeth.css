@@ -1,0 +1,36 @@
+/* .tooth-chart {
+  width: 450px;
+}
+
+#Spots {
+  polygon,
+  path {
+    -webkit-transition: fill 0.25s;
+    transition: fill 0.25s;
+  }
+  polygon:hover,
+  polygon:active,
+  path:hover,
+  path:active {
+    fill: #dddddd !important;
+  }
+} */
+
+/* Assuming the class "tooth-chart" is applied to the root element of your React component */
+.tooth-chart {
+  width: 450px;
+}
+
+/* Assuming "Spots" is the ID of an SVG element or a container within your React component */
+#Spots polygon,
+#Spots path {
+  -webkit-transition: fill 0.25s;
+  transition: fill 0.25s;
+}
+
+#Spots polygon:hover,
+#Spots polygon:active,
+#Spots path:hover,
+#Spots path:active {
+  fill: #dddddd !important;
+}

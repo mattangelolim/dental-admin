@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Modal from "@mui/material/Modal";
 import { Box, Button } from "@mui/material";
 import axios from "axios";
+import TeethModal from "../components/TeethModal";
 
 const AppointmentHistoryPage = () => {
   const [appointmentHistory, setAppointmentHistory] = useState([]);
@@ -12,6 +13,7 @@ const AppointmentHistoryPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [selectedToothIndexes, setSelectedToothIndexes] = useState([]);
+  const [selectedToothIndexes2, setSelectedToothIndexes2] = useState([]);
 
   const handleAddIconClick = (rowId) => {
     setSelectedRowId(rowId);
@@ -25,15 +27,25 @@ const AppointmentHistoryPage = () => {
   const handleNumberClick = (number) => {
     setSelectedToothIndexes((prevIndexes) => [...prevIndexes, number]);
   };
+  const handleNumberClick2 = (number) => {
+    setSelectedToothIndexes2((prevIndexes) => [...prevIndexes, number]);
+  };
 
   const handleConfirmSelection = () => {
     // Increment each selected number by 1
     const incrementedIndexes = selectedToothIndexes.map((index) => index + 1);
+    const incrementedIndexes2 = selectedToothIndexes2.map((index) => index + 1);
 
-    // Send the array as the body of the POST request using Axios
+    const combination = [
+      ...incrementedIndexes, // Elements of array1
+      1, // Number 1 to be inserted
+      ...incrementedIndexes2, // Elements of array2
+    ];
+
+    // // Send the array as the body of the POST request using Axios
     axios
       .post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
-        tooth_index: incrementedIndexes,
+        tooth_index: combination,
       })
       .then((response) => {
         if (response.data.message === "Tooth name updated successfully") {
@@ -50,11 +62,29 @@ const AppointmentHistoryPage = () => {
     setSelectedRowId(null);
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Done":
+        return "green"; // You can adjust the color for 'Done'
+      case "Today":
+        return "blue"; // You can adjust the color for 'Today'
+      case "Declined":
+        return "red"; // You can adjust the color for 'Declined'
+      case "Pending":
+        return "yellow"; // You can adjust the color for 'Pending'
+      case "Approved":
+        return "cyan"; // You can adjust the color for 'Approved'
+      default:
+        return "";
+    }
+  };
+
   useEffect(() => {
     // Fetch all appointments from the API
     axios
       .get("https://13.211.204.176/fetch/all/Appointments")
       .then((response) => {
+        // console.log(response.data.allAppointments);
         setAppointmentHistory(response.data.allAppointments);
       })
       .catch((error) => {
@@ -72,19 +102,6 @@ const AppointmentHistoryPage = () => {
     { field: "end_time", headerName: "End Time", width: 120 },
     { field: "service", headerName: "Service", width: 200 },
     {
-      field: "tooth_name",
-      headerName: "Tooth Name",
-      width: 120,
-      renderCell: (params) =>
-        params.value ? (
-          params.value
-        ) : (
-          <IconButton onClick={() => handleAddIconClick(params.row.id)}>
-            <AddIcon />
-          </IconButton>
-        ),
-    },
-    {
       field: "additional_service",
       headerName: "Additional Service",
       width: 200,
@@ -98,7 +115,35 @@ const AppointmentHistoryPage = () => {
         </div>
       ),
     },
-    { field: "status", headerName: "Status", width: 120 },
+    {
+      field: "tooth_name",
+      headerName: "Tooth Name",
+      width: 120,
+      renderCell: (params) =>
+        params.value ? (
+          <>
+            <TeethModal
+              teethArray={params.value}
+              service={params.row.service}
+              additional={params.row.AdditionalServices[0].service_description}
+            />
+          </>
+        ) : (
+          <IconButton onClick={() => handleAddIconClick(params.row.id)}>
+            <AddIcon />
+          </IconButton>
+        ),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 120,
+      renderCell: (params) => (
+        <div style={{ color: getStatusColor(params.value) }}>
+          {params.value}
+        </div>
+      ),
+    },
   ];
 
   // Function to calculate status based on the date
@@ -160,63 +205,133 @@ const AppointmentHistoryPage = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(16, 1fr)",
                   gap: 1,
+                  // border: "2px solid red",
+                  width: "80%",
+                  borderRadius: 2,
                 }}
               >
-                <div className="flex flex-col justify-center items-center p-4 ">
-                  <div className="flex flex-col justify-center items-center">
-                    <div className="flex flex-row ml-12">
-                      {[...Array(16)].map((_, index) => (
-                        <Button
-                          key={index}
-                          variant="contained"
-                          onClick={() => handleNumberClick(index)}
-                          sx={{
-                            mb: 1,
-                            ml: 2,
-                            color: selectedToothIndexes.includes(index)
-                              ? "blue"
-                              : "black",
-                            fontWeight: selectedToothIndexes.includes(index)
-                              ? "bold"
-                              : "normal",
-                            transform: selectedToothIndexes.includes(index)
-                              ? "scale(1.2)"
-                              : "scale(1)",
-                            transition: "transform 0.3s ease",
-                          }}
-                        >
-                          {index + 1}
-                        </Button>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-row ml-12">
-                      {[...Array(16)].map((_, index) => (
-                        <Button
-                          key={index + 16}
-                          variant="contained"
-                          onClick={() => handleNumberClick(index + 16)}
-                          sx={{
-                            mb: 1,
-                            ml: 2,
-                            color: selectedToothIndexes.includes(index + 16)
-                              ? "blue"
-                              : "black",
-                            fontWeight: selectedToothIndexes.includes(
-                              index + 16
-                            )
-                              ? "bold"
-                              : "normal",
-                            transform: selectedToothIndexes.includes(index + 16)
-                              ? "scale(1.2)"
-                              : "scale(1)",
-                            transition: "transform 0.3s ease",
-                          }}
-                        >
-                          {index + 17}
-                        </Button>
-                      ))}
-                    </div>
+                <div className="flex flex-col justify-center items-center  w-full">
+                  <div className="flex flex-col justify-center items-center  w-full">
+                    {appointmentHistory.map((item, index) => (
+                      <div key={index}>
+                        <p>{item.service}</p>
+                        <div className="flex flex-row m-2 gap-2 ">
+                          {[...Array(16)].map((_, index) => (
+                            <Button
+                              key={index}
+                              variant="contained"
+                              onClick={() => handleNumberClick(index)}
+                              sx={{
+                                // mb: 1,
+                                // ml: 5,
+                                color: selectedToothIndexes.includes(index)
+                                  ? "blue"
+                                  : "black",
+                                fontWeight: selectedToothIndexes.includes(index)
+                                  ? "bold"
+                                  : "normal",
+                                transform: selectedToothIndexes.includes(index)
+                                  ? "scale(1.2)"
+                                  : "scale(1)",
+                                transition: "transform 0.3s ease",
+                              }}
+                            >
+                              {index + 1}
+                            </Button>
+                          ))}
+                        </div>
+                        <div className="flex flex-row m-2 gap-2">
+                          {[...Array(16)].map((_, index) => (
+                            <Button
+                              key={index + 16}
+                              variant="contained"
+                              onClick={() => handleNumberClick(index + 16)}
+                              sx={{
+                                // mb: 1,
+                                // ml: 2,
+                                color: selectedToothIndexes.includes(index + 16)
+                                  ? "blue"
+                                  : "black",
+                                fontWeight: selectedToothIndexes.includes(
+                                  index + 16
+                                )
+                                  ? "bold"
+                                  : "normal",
+                                transform: selectedToothIndexes.includes(
+                                  index + 16
+                                )
+                                  ? "scale(1.2)"
+                                  : "scale(1)",
+                                transition: "transform 0.3s ease",
+                              }}
+                            >
+                              {index + 17}
+                            </Button>
+                          ))}
+                        </div>
+                        <p>
+                          {item.AdditionalServices[index].service_description}
+                        </p>
+                        <div className="flex flex-row m-2 gap-2 ">
+                          {[...Array(16)].map((_, index) => (
+                            <Button
+                              key={index}
+                              variant="contained"
+                              onClick={() => handleNumberClick2(index)}
+                              sx={{
+                                // mb: 1,
+                                // ml: 5,
+                                color: selectedToothIndexes2.includes(index)
+                                  ? "blue"
+                                  : "black",
+                                fontWeight: selectedToothIndexes2.includes(
+                                  index
+                                )
+                                  ? "bold"
+                                  : "normal",
+                                transform: selectedToothIndexes2.includes(index)
+                                  ? "scale(1.2)"
+                                  : "scale(1)",
+                                transition: "transform 0.3s ease",
+                              }}
+                            >
+                              {index + 1}
+                            </Button>
+                          ))}
+                        </div>
+                        <div className="flex flex-row m-2 gap-2">
+                          {[...Array(16)].map((_, index) => (
+                            <Button
+                              key={index + 16}
+                              variant="contained"
+                              onClick={() => handleNumberClick2(index + 16)}
+                              sx={{
+                                // mb: 1,
+                                // ml: 2,
+                                color: selectedToothIndexes2.includes(
+                                  index + 16
+                                )
+                                  ? "blue"
+                                  : "black",
+                                fontWeight: selectedToothIndexes2.includes(
+                                  index + 16
+                                )
+                                  ? "bold"
+                                  : "normal",
+                                transform: selectedToothIndexes2.includes(
+                                  index + 16
+                                )
+                                  ? "scale(1.2)"
+                                  : "scale(1)",
+                                transition: "transform 0.3s ease",
+                              }}
+                            >
+                              {index + 17}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                   <div className="mt-2 border-2 bg-blue-500 hover:text-white">
                     <Button
@@ -228,7 +343,7 @@ const AppointmentHistoryPage = () => {
                         width: "400px",
                         margin: "0 auto",
                         display: "block",
-                        color: "black",
+                        // color: "black",
                         "&:hover": {
                           color: "white", // Change text color to white on hover
                         },
