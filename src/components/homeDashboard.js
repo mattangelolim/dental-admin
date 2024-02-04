@@ -56,14 +56,14 @@ const HomeDashboard = () => {
         const defaultStart = new Date("2024-01-01").toISOString();
         const defaultEnd = new Date().toISOString();
 
-        let servicesUrl = "http://localhost:9000/top/services";
-        let clientsUrl = "http://localhost:9000/clients/count";
-        let appointmentsUrl = "http://localhost:9000/appointment/numbers";
+        let servicesUrl = "https://13.211.204.176/top/services";
+        let clientsUrl = "https://13.211.204.176/clients/count";
+        let appointmentsUrl = "https://13.211.204.176/appointment/numbers";
         let approvedAppointmentUrl =
-          "http://localhost:9000/approved/appointment/num";
+          "https://13.211.204.176/approved/appointment/num";
         let pendingAppointmentUrl =
-          "http://localhost:9000/pending/appointment/num";
-        let todayAppointmentUrl = "http://localhost:9000/appointment/today";
+          "https://13.211.204.176/pending/appointment/num";
+        let todayAppointmentUrl = "https://13.211.204.176/appointment/today";
 
         const startDateParamAppointment = fromDate ? fromDate : defaultStart;
         const endDateParamAppointment = toDate ? toDate : defaultEnd;

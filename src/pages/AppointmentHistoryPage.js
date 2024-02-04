@@ -31,7 +31,7 @@ const AppointmentHistoryPage = () => {
     const incrementedIndexes = selectedToothIndexes.map(index => index + 1);
 
     // Send the array as the body of the POST request using Axios
-    axios.post(`http://localhost:9000/update/toothname?uid=${selectedRowId}`, {
+    axios.post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
       tooth_index: incrementedIndexes
     })
       .then(response => {
@@ -53,7 +53,7 @@ const AppointmentHistoryPage = () => {
   useEffect(() => {
     // Fetch all appointments from the API
     axios
-      .get("http://localhost:9000/fetch/all/Appointments")
+      .get("https://13.211.204.176/fetch/all/Appointments")
       .then((response) => {
         setAppointmentHistory(response.data.allAppointments);
       })

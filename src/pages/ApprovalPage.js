@@ -13,7 +13,7 @@ const ApprovalPage = () => {
   useEffect(() => {
     // Fetch pending appointments from the API
     axios
-      .get("http://localhost:9000/fetch/pending/Appointments")
+      .get("https://13.211.204.176/fetch/pending/Appointments")
       .then((response) => {
         setAppointments(response.data.pendingAppointments);
       })
@@ -45,7 +45,7 @@ const ApprovalPage = () => {
   const handlePostApproval = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/approve/appointment?id=${selectedAppointment}&approval=${approval}&doctor_note=${doctor_note}`
+        `https://13.211.204.176/approve/appointment?id=${selectedAppointment}&approval=${approval}&doctor_note=${doctor_note}`
       );
       if (response.status === 200) {
         alert("Appointment Status Updated");

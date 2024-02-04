@@ -21,7 +21,7 @@ const MyClientsPage = () => {
   ];
 
   useEffect(() => {
-    const baseUrl = "http://localhost:9000/user/list";
+    const baseUrl = "https://13.211.204.176/user/list";
     const fetchAllUsers = async () => {
       try {
         const response = await axios.get(baseUrl); // Use await here
