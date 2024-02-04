@@ -20,8 +20,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 
-const pages = ["Home", "Client", "Appointment", "History"];
-const pagesLink = ["/Home", "/Client", "/Appointment", "/History"];
+const pages = ["Home", "Client", "Appointment", "History", "Services"];
+const pagesLink = ["/Home", "/Client", "/Appointment", "/History", "/Services"];
 const settings = ["Logout"];
 
 function NavBar() {
@@ -82,52 +82,55 @@ function NavBar() {
                   </div>
                 ))}
               </div>
-              <div className="flex gap-5">
-                <Tooltip>
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <AccountCircleIcon
-                      style={{ fontSize: "2rem", color: "white" }}
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorSettings}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorSettings)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings.map((setting, index) => (
-                    <MenuItem onClick={handleCloseUserMenu} key={index}>
-                      {setting === "Profile" ? (
-                        <div
-                          className="flex gap-2"
-                          onClick={() => navigate("/Profile")}
-                        >
-                          <AccountCircleIcon />
-                          {setting}
-                        </div>
-                      ) : (
-                        <div
-                          className="flex gap-2"
-                          onClick={() => handleLogout()}
-                        >
-                          <LogoutIcon />
-                          {setting}
-                        </div>
-                      )}
-                    </MenuItem>
-                  ))}
-                </Menu>
+              <div className="flex gap-2 justify-center items-center">
+                <div className="flex gap-5">
+                  <Tooltip>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <AccountCircleIcon
+                        style={{ fontSize: "2rem", color: "white" }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorSettings}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorSettings)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {settings.map((setting, index) => (
+                      <MenuItem onClick={handleCloseUserMenu} key={index}>
+                        {setting === "Profile" ? (
+                          <div
+                            className="flex gap-2"
+                            onClick={() => navigate("/Profile")}
+                          >
+                            <AccountCircleIcon />
+                            {setting}
+                          </div>
+                        ) : (
+                          <div
+                            className="flex gap-2"
+                            onClick={() => handleLogout()}
+                          >
+                            <LogoutIcon />
+                            {setting}
+                          </div>
+                        )}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </div>
+                <p>Admin</p>
               </div>
             </Box>
           </Toolbar>

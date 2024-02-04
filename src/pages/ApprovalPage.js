@@ -72,112 +72,124 @@ const ApprovalPage = () => {
             Appointment Approvals
           </p>
         </div>
-        <div className=" w-full">
-          <div className="flex flex-wrap -m-4">
-            {appointments.map((appointment, index) => (
-              <div key={index} className="w-1/3 p-4 ">
-                <Paper
-                  style={{ padding: "20px", marginTop: "20px" }}
-                  className="bg-white shadow-md rounded-lg border-2"
-                >
-                  <Typography variant="h6" className="text-blue-800">
-                    Name: {appointment.name}
-                  </Typography>
-                  <Typography variant="body1">
-                    Contact: {appointment.contact}
-                  </Typography>
-                  <Typography variant="body1">
-                    Date: {appointment.date}
-                  </Typography>
-                  <Typography variant="body1">
-                    Time: {appointment.start_time} - {appointment.end_time}
-                  </Typography>
-                  <Typography variant="body1">
-                    Service: {appointment.service}
-                  </Typography>
-                  <Typography variant="body1">
-                    Service Fee: {appointment.service_cost}
-                  </Typography>
-                  <Typography variant="body1">
-                    Tooth: {appointment.tooth_name}
-                  </Typography>
-                  {appointment.AdditionalServices.length > 0 && (
-                    <div>
-                      <Typography variant="body1">
-                        Additional Services:
+        {appointments.length === 0 ? (
+          <p className="border-2 w-full p-2 rounded-lg">
+            No pending approvals.
+          </p>
+        ) : (
+          <>
+            <div className=" w-full">
+              <div className="flex flex-wrap -m-4">
+                {appointments.map((appointment, index) => (
+                  <div key={index} className="w-1/3 p-4 ">
+                    <Paper
+                      style={{ padding: "20px", marginTop: "20px" }}
+                      className="bg-white shadow-md rounded-lg border-2"
+                    >
+                      <Typography variant="h6" className="text-blue-800">
+                        Name: {appointment.name}
                       </Typography>
-                      {appointment.AdditionalServices.map(
-                        (service, serviceIndex) => (
-                          <div key={serviceIndex} className="ml-4">
-                            <Typography variant="body2">
-                              - {service.service_description}
-                            </Typography>
-                            <Typography variant="body2">
-                              {" "}
-                              Price: {service.service_cost}
-                            </Typography>
-                          </div>
-                        )
+                      <Typography variant="body1">
+                        Contact: {appointment.contact}
+                      </Typography>
+                      <Typography variant="body1">
+                        Date: {appointment.date}
+                      </Typography>
+                      <Typography variant="body1">
+                        Time: {appointment.start_time} - {appointment.end_time}
+                      </Typography>
+                      <Typography variant="body1">
+                        Service: {appointment.service}
+                      </Typography>
+                      <Typography variant="body1">
+                        Service Fee: {appointment.service_cost}
+                      </Typography>
+                      <Typography variant="body1">
+                        Tooth: {appointment.tooth_name}
+                      </Typography>
+                      {appointment.AdditionalServices.length > 0 && (
+                        <div>
+                          <Typography variant="body1">
+                            Additional Services:
+                          </Typography>
+                          {appointment.AdditionalServices.map(
+                            (service, serviceIndex) => (
+                              <div key={serviceIndex} className="ml-4">
+                                <Typography variant="body2">
+                                  - {service.service_description}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {" "}
+                                  Price: {service.service_cost}
+                                </Typography>
+                              </div>
+                            )
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
-                  <Typography variant="body1">
-                    Client Note: {appointment.client_note}
-                  </Typography>
-                  <div className="flex flex-row gap-2">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className="bg-blue-500 hover:bg-blue-700"
-                      onClick={() =>
-                        handleApproveClick(appointment.id, "Approved")
-                      }
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      className="bg-red-500 hover:bg-red-700"
-                      onClick={() =>
-                        handleDeclineClick(appointment.id, "Declined")
-                      }
-                    >
-                      Decline
-                    </Button>
+                      <Typography variant="body1">
+                        Client Note: {appointment.client_note}
+                      </Typography>
+                      <div className="flex flex-row gap-2">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          className="bg-blue-500 hover:bg-blue-700"
+                          onClick={() =>
+                            handleApproveClick(appointment.id, "Approved")
+                          }
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className="bg-red-500 hover:bg-red-700"
+                          onClick={() =>
+                            handleDeclineClick(appointment.id, "Declined")
+                          }
+                        >
+                          Decline
+                        </Button>
+                      </div>
+                    </Paper>
                   </div>
-                </Paper>
+                ))}
               </div>
-            ))}
-          </div>
-          {/* Modal for entering doctor's note */}
-        </div>
-        <div className=" w-full">
-          <Modal open={isModalOpen} onClose={handleModalClose}>
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-white shadow-md p-4">
-              <Typography variant="h6" className="text-gray-800" gutterBottom>
-                Enter Doctor's Note for {selectedAppointment?.name}
-              </Typography>
-              <TextField
-                label="Doctor's Note"
-                multiline
-                rows={4}
-                fullWidth
-                value={doctor_note}
-                onChange={handleDoctorsNoteChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                className="bg-blue-500 hover:bg-blue-700"
-                onClick={handlePostApproval}
-                style={{ marginTop: "10px" }}
-              >
-                Submit
-              </Button>
+              {/* Modal for entering doctor's note */}
             </div>
-          </Modal>
-        </div>
+            <div className=" w-full">
+              <Modal open={isModalOpen} onClose={handleModalClose}>
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-white shadow-md p-4">
+                  <Typography
+                    variant="h6"
+                    className="text-gray-800"
+                    gutterBottom
+                  >
+                    Enter Doctor's Note for {selectedAppointment?.name}
+                  </Typography>
+                  <TextField
+                    label="Doctor's Note"
+                    multiline
+                    rows={4}
+                    fullWidth
+                    value={doctor_note}
+                    onChange={handleDoctorsNoteChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className="bg-blue-500 hover:bg-blue-700"
+                    onClick={handlePostApproval}
+                    style={{ marginTop: "10px" }}
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </Modal>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

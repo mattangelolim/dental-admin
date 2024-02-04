@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import Modal from '@mui/material/Modal';
-import { Box, Button } from '@mui/material';
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import Modal from "@mui/material/Modal";
+import { Box, Button } from "@mui/material";
 import axios from "axios";
 
 const AppointmentHistoryPage = () => {
@@ -23,31 +23,31 @@ const AppointmentHistoryPage = () => {
   };
 
   const handleNumberClick = (number) => {
-    setSelectedToothIndexes(prevIndexes => [...prevIndexes, number]);
+    setSelectedToothIndexes((prevIndexes) => [...prevIndexes, number]);
   };
 
   const handleConfirmSelection = () => {
     // Increment each selected number by 1
-    const incrementedIndexes = selectedToothIndexes.map(index => index + 1);
+    const incrementedIndexes = selectedToothIndexes.map((index) => index + 1);
 
     // Send the array as the body of the POST request using Axios
-    axios.post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
-      tooth_index: incrementedIndexes
-    })
-      .then(response => {
+    axios
+      .post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
+        tooth_index: incrementedIndexes,
+      })
+      .then((response) => {
         if (response.data.message === "Tooth name updated successfully") {
-          alert("Tooth Name Set Successful")
-          window.location.reload()
+          alert("Tooth Name Set Successful");
+          window.location.reload();
         }
       })
-      .catch(error => {
-        console.error('Error confirming selection:', error);
+      .catch((error) => {
+        console.error("Error confirming selection:", error);
       });
 
     handleCloseModal();
-    setSelectedToothIndexes([])
-    setSelectedRowId(null)
-
+    setSelectedToothIndexes([]);
+    setSelectedRowId(null);
   };
 
   useEffect(() => {
@@ -72,14 +72,17 @@ const AppointmentHistoryPage = () => {
     { field: "end_time", headerName: "End Time", width: 120 },
     { field: "service", headerName: "Service", width: 200 },
     {
-      field: 'tooth_name', headerName: 'Tooth Name', width: 120,
-      renderCell: (params) => (
-        params.value ? params.value : (
+      field: "tooth_name",
+      headerName: "Tooth Name",
+      width: 120,
+      renderCell: (params) =>
+        params.value ? (
+          params.value
+        ) : (
           <IconButton onClick={() => handleAddIconClick(params.row.id)}>
             <AddIcon />
           </IconButton>
-        )
-      )
+        ),
     },
     {
       field: "additional_service",
@@ -129,98 +132,116 @@ const AppointmentHistoryPage = () => {
             Appointment History
           </p>
         </div>
-        <div className=" w-full">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
-            checkboxSelection
-          />
-        </div>
-        <Modal open={open} onClose={handleCloseModal}>
-
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              display: 'grid',
-              gridTemplateColumns: 'repeat(16, 1fr)',
-              gap: 1,
-            }}
-          >
-            <div className="flex flex-col justify-center items-center p-4 ">
-              <div className="flex flex-col justify-center items-center">
-                <div className="flex flex-row ml-12">
-
-                  {[...Array(16)].map((_, index) => (
-                    <Button
-                      key={index}
-                      variant="contained"
-                      onClick={() => handleNumberClick(index)}
-                      sx={{
-                        mb: 1,
-                        ml: 2,
-                        color: selectedToothIndexes.includes(index) ? 'blue' : 'black',
-                        fontWeight: selectedToothIndexes.includes(index) ? 'bold' : 'normal',
-                        transform: selectedToothIndexes.includes(index) ? 'scale(1.2)' : 'scale(1)',
-                        transition: 'transform 0.3s ease',
-                      }}
-                    >
-                      {index + 1}
-                    </Button>
-                  ))}
-                </div>
-
-                <div className="flex flex-row ml-12">
-
-                  {[...Array(16)].map((_, index) => (
-                    <Button
-                      key={index + 16}
-                      variant="contained"
-                      onClick={() => handleNumberClick(index + 16)}
-                      sx={{
-                        mb: 1,
-                        ml: 2,
-                        color: selectedToothIndexes.includes(index + 16) ? 'blue' : 'black',
-                        fontWeight: selectedToothIndexes.includes(index + 16) ? 'bold' : 'normal',
-                        transform: selectedToothIndexes.includes(index + 16) ? 'scale(1.2)' : 'scale(1)',
-                        transition: 'transform 0.3s ease',
-                      }}
-                    >
-                      {index + 17}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-2 border-2 bg-blue-500 hover:text-white">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleConfirmSelection}
-                  sx={{
-                    height: '50px',
-                    width: '400px',
-                    margin: '0 auto',
-                    display: 'block',
-                    color: "black",
-                    "&:hover": {
-                      color: "white", // Change text color to white on hover
-                    }
-                  }}
-                >
-                  Confirm
-                </Button>
-              </div>
+        {appointmentHistory.length == 0 ? (
+          <p className="border-2 w-full p-2 rounded-lg">
+            No listed appointment.
+          </p>
+        ) : (
+          <>
+            <div className=" w-full">
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+                checkboxSelection
+              />
             </div>
-          </Box>
+            <Modal open={open} onClose={handleCloseModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(16, 1fr)",
+                  gap: 1,
+                }}
+              >
+                <div className="flex flex-col justify-center items-center p-4 ">
+                  <div className="flex flex-col justify-center items-center">
+                    <div className="flex flex-row ml-12">
+                      {[...Array(16)].map((_, index) => (
+                        <Button
+                          key={index}
+                          variant="contained"
+                          onClick={() => handleNumberClick(index)}
+                          sx={{
+                            mb: 1,
+                            ml: 2,
+                            color: selectedToothIndexes.includes(index)
+                              ? "blue"
+                              : "black",
+                            fontWeight: selectedToothIndexes.includes(index)
+                              ? "bold"
+                              : "normal",
+                            transform: selectedToothIndexes.includes(index)
+                              ? "scale(1.2)"
+                              : "scale(1)",
+                            transition: "transform 0.3s ease",
+                          }}
+                        >
+                          {index + 1}
+                        </Button>
+                      ))}
+                    </div>
 
-        </Modal>
+                    <div className="flex flex-row ml-12">
+                      {[...Array(16)].map((_, index) => (
+                        <Button
+                          key={index + 16}
+                          variant="contained"
+                          onClick={() => handleNumberClick(index + 16)}
+                          sx={{
+                            mb: 1,
+                            ml: 2,
+                            color: selectedToothIndexes.includes(index + 16)
+                              ? "blue"
+                              : "black",
+                            fontWeight: selectedToothIndexes.includes(
+                              index + 16
+                            )
+                              ? "bold"
+                              : "normal",
+                            transform: selectedToothIndexes.includes(index + 16)
+                              ? "scale(1.2)"
+                              : "scale(1)",
+                            transition: "transform 0.3s ease",
+                          }}
+                        >
+                          {index + 17}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="mt-2 border-2 bg-blue-500 hover:text-white">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleConfirmSelection}
+                      sx={{
+                        height: "50px",
+                        width: "400px",
+                        margin: "0 auto",
+                        display: "block",
+                        color: "black",
+                        "&:hover": {
+                          color: "white", // Change text color to white on hover
+                        },
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </div>
+                </div>
+              </Box>
+            </Modal>
+          </>
+        )}
       </div>
     </div>
   );

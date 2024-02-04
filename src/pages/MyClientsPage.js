@@ -44,19 +44,23 @@ const MyClientsPage = () => {
             Manage Clients
           </p>
         </div>
-        <div className=" w-full">
-          <DataGrid
-            slots={{
-              toolbar: GridToolbar,
-            }}
-            rows={userList}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
-            slotProps={{ toolbar: { showQuickFilter: true } }}
-            component={{ Toolbar: GridToolbar }}
-          />
-        </div>
+        {userList.length === 0 ? (
+          <p className="border-2 w-full p-2 rounded-lg">No listed clients.</p>
+        ) : (
+          <div className=" w-full">
+            <DataGrid
+              slots={{
+                toolbar: GridToolbar,
+              }}
+              rows={userList}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 20]}
+              slotProps={{ toolbar: { showQuickFilter: true } }}
+              component={{ Toolbar: GridToolbar }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
