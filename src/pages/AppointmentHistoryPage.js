@@ -84,7 +84,6 @@ const AppointmentHistoryPage = () => {
     axios
       .get("https://13.211.204.176/fetch/all/Appointments")
       .then((response) => {
-        console.log(response.data.allAppointments);
         setAppointmentHistory(response.data.allAppointments);
       })
       .catch((error) => {
@@ -129,9 +128,11 @@ const AppointmentHistoryPage = () => {
             />
           </>
         ) : (
-          <IconButton onClick={() => handleAddIconClick(params.row.id)}>
-            <AddIcon />
-          </IconButton>
+          params.row.status === "Approved" && (
+            <IconButton onClick={() => handleAddIconClick(params.row.id)}>
+              <AddIcon />
+            </IconButton>
+          )
         ),
     },
     {
@@ -189,7 +190,6 @@ const AppointmentHistoryPage = () => {
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5, 10, 20]}
-                checkboxSelection
               />
             </div>
             <Modal open={open} onClose={handleCloseModal}>
@@ -212,124 +212,168 @@ const AppointmentHistoryPage = () => {
               >
                 <div className="flex flex-col justify-center items-center  w-full">
                   <div className="flex flex-col justify-center items-center  w-full">
-                    {appointmentHistory.map((item, index) => (
-                      <div key={index}>
-                        <p>{item.service}</p>
-                        <div className="flex flex-row m-2 gap-2 ">
-                          {[...Array(16)].map((_, index) => (
-                            <Button
-                              key={index}
-                              variant="contained"
-                              onClick={() => handleNumberClick(index)}
-                              sx={{
-                                // mb: 1,
-                                // ml: 5,
-                                color: selectedToothIndexes.includes(index)
-                                  ? "blue"
-                                  : "black",
-                                fontWeight: selectedToothIndexes.includes(index)
-                                  ? "bold"
-                                  : "normal",
-                                transform: selectedToothIndexes.includes(index)
-                                  ? "scale(1.2)"
-                                  : "scale(1)",
-                                transition: "transform 0.3s ease",
-                              }}
-                            >
-                              {index + 1}
-                            </Button>
-                          ))}
-                        </div>
-                        <div className="flex flex-row m-2 gap-2">
-                          {[...Array(16)].map((_, index) => (
-                            <Button
-                              key={index + 16}
-                              variant="contained"
-                              onClick={() => handleNumberClick(index + 16)}
-                              sx={{
-                                // mb: 1,
-                                // ml: 2,
-                                color: selectedToothIndexes.includes(index + 16)
-                                  ? "blue"
-                                  : "black",
-                                fontWeight: selectedToothIndexes.includes(
-                                  index + 16
-                                )
-                                  ? "bold"
-                                  : "normal",
-                                transform: selectedToothIndexes.includes(
-                                  index + 16
-                                )
-                                  ? "scale(1.2)"
-                                  : "scale(1)",
-                                transition: "transform 0.3s ease",
-                              }}
-                            >
-                              {index + 17}
-                            </Button>
-                          ))}
-                        </div>
-                        <p>{item.AdditionalServices[0].service_description}</p>
-                        <div className="flex flex-row m-2 gap-2 ">
-                          {[...Array(16)].map((_, index) => (
-                            <Button
-                              key={index}
-                              variant="contained"
-                              onClick={() => handleNumberClick2(index)}
-                              sx={{
-                                // mb: 1,
-                                // ml: 5,
-                                color: selectedToothIndexes2.includes(index)
-                                  ? "blue"
-                                  : "black",
-                                fontWeight: selectedToothIndexes2.includes(
-                                  index
-                                )
-                                  ? "bold"
-                                  : "normal",
-                                transform: selectedToothIndexes2.includes(index)
-                                  ? "scale(1.2)"
-                                  : "scale(1)",
-                                transition: "transform 0.3s ease",
-                              }}
-                            >
-                              {index + 1}
-                            </Button>
-                          ))}
-                        </div>
-                        <div className="flex flex-row m-2 gap-2">
-                          {[...Array(16)].map((_, index) => (
-                            <Button
-                              key={index + 16}
-                              variant="contained"
-                              onClick={() => handleNumberClick2(index + 16)}
-                              sx={{
-                                // mb: 1,
-                                // ml: 2,
-                                color: selectedToothIndexes2.includes(
-                                  index + 16
-                                )
-                                  ? "blue"
-                                  : "black",
-                                fontWeight: selectedToothIndexes2.includes(
-                                  index + 16
-                                )
-                                  ? "bold"
-                                  : "normal",
-                                transform: selectedToothIndexes2.includes(
-                                  index + 16
-                                )
-                                  ? "scale(1.2)"
-                                  : "scale(1)",
-                                transition: "transform 0.3s ease",
-                              }}
-                            >
-                              {index + 17}
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                    {selectedRowId &&
+                      appointmentHistory
+                        .filter((item) => item.id === selectedRowId)
+                        .map((item, index) => (
+                          <div key={index}>
+                            <div className="flex justify-between items-center">
+                              <p>{item.service}</p>
+                              <Button
+                                variant="outlined"
+                                onClick={() =>
+                                  setSelectedToothIndexes(
+                                    Array.from(
+                                      { length: 32 },
+                                      (_, index) => index
+                                    )
+                                  )
+                                }
+                              >
+                                Select all
+                              </Button>
+                            </div>
+                            <div className="flex flex-row m-2 gap-2 ">
+                              {[...Array(16)].map((_, index) => (
+                                <Button
+                                  key={index}
+                                  variant="contained"
+                                  onClick={() => handleNumberClick(index)}
+                                  sx={{
+                                    // mb: 1,
+                                    // ml: 5,
+                                    color: selectedToothIndexes.includes(index)
+                                      ? "blue"
+                                      : "black",
+                                    fontWeight: selectedToothIndexes.includes(
+                                      index
+                                    )
+                                      ? "bold"
+                                      : "normal",
+                                    transform: selectedToothIndexes.includes(
+                                      index
+                                    )
+                                      ? "scale(1.2)"
+                                      : "scale(1)",
+                                    transition: "transform 0.3s ease",
+                                  }}
+                                >
+                                  {index + 1}
+                                </Button>
+                              ))}
+                            </div>
+                            <div className="flex flex-row m-2 gap-2">
+                              {[...Array(16)].map((_, index) => (
+                                <Button
+                                  key={index + 16}
+                                  variant="contained"
+                                  onClick={() => handleNumberClick(index + 16)}
+                                  sx={{
+                                    // mb: 1,
+                                    // ml: 2,
+                                    color: selectedToothIndexes.includes(
+                                      index + 16
+                                    )
+                                      ? "blue"
+                                      : "black",
+                                    fontWeight: selectedToothIndexes.includes(
+                                      index + 16
+                                    )
+                                      ? "bold"
+                                      : "normal",
+                                    transform: selectedToothIndexes.includes(
+                                      index + 16
+                                    )
+                                      ? "scale(1.2)"
+                                      : "scale(1)",
+                                    transition: "transform 0.3s ease",
+                                  }}
+                                >
+                                  {index + 17}
+                                </Button>
+                              ))}
+                            </div>
+
+                            <div className="flex justify-between items-center">
+                              <p>
+                                {item.AdditionalServices[0].service_description}
+                              </p>
+                              <Button
+                                variant="outlined"
+                                onClick={() =>
+                                  setSelectedToothIndexes2(
+                                    Array.from(
+                                      { length: 32 },
+                                      (_, index) => index
+                                    )
+                                  )
+                                }
+                              >
+                                Select all
+                              </Button>
+                            </div>
+                            <div className="flex flex-row m-2 gap-2 ">
+                              {[...Array(16)].map((_, index) => (
+                                <Button
+                                  key={index}
+                                  variant="contained"
+                                  onClick={() => handleNumberClick2(index)}
+                                  sx={{
+                                    // mb: 1,
+                                    // ml: 5,
+                                    color: selectedToothIndexes2.includes(index)
+                                      ? "blue"
+                                      : "black",
+                                    fontWeight: selectedToothIndexes2.includes(
+                                      index
+                                    )
+                                      ? "bold"
+                                      : "normal",
+                                    transform: selectedToothIndexes2.includes(
+                                      index
+                                    )
+                                      ? "scale(1.2)"
+                                      : "scale(1)",
+                                    transition: "transform 0.3s ease",
+                                  }}
+                                >
+                                  {index + 1}
+                                </Button>
+                              ))}
+                            </div>
+                            <div className="flex flex-row m-2 gap-2">
+                              {[...Array(16)].map((_, index) => (
+                                <Button
+                                  key={index + 16}
+                                  variant="contained"
+                                  onClick={() => handleNumberClick2(index + 16)}
+                                  sx={{
+                                    // mb: 1,
+                                    // ml: 2,
+                                    color: selectedToothIndexes2.includes(
+                                      index + 16
+                                    )
+                                      ? "blue"
+                                      : "black",
+                                    fontWeight: selectedToothIndexes2.includes(
+                                      index + 16
+                                    )
+                                      ? "bold"
+                                      : "normal",
+                                    transform: selectedToothIndexes2.includes(
+                                      index + 16
+                                    )
+                                      ? "scale(1.2)"
+                                      : "scale(1)",
+                                    transition: "transform 0.3s ease",
+                                  }}
+                                >
+                                  {index + 17}
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
                   </div>
                   <div className="mt-2 border-2 bg-blue-500 hover:text-white">
                     <Button
