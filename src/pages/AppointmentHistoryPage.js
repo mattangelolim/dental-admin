@@ -84,7 +84,7 @@ const AppointmentHistoryPage = () => {
     axios
       .get("https://13.211.204.176/fetch/all/Appointments")
       .then((response) => {
-        // console.log(response.data.allAppointments);
+        console.log(response.data.allAppointments);
         setAppointmentHistory(response.data.allAppointments);
       })
       .catch((error) => {
@@ -269,9 +269,7 @@ const AppointmentHistoryPage = () => {
                             </Button>
                           ))}
                         </div>
-                        <p>
-                          {item.AdditionalServices[index].service_description}
-                        </p>
+                        <p>{item.AdditionalServices[0].service_description}</p>
                         <div className="flex flex-row m-2 gap-2 ">
                           {[...Array(16)].map((_, index) => (
                             <Button
