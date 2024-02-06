@@ -39,14 +39,20 @@ function TeethChart({ teethArray, service, additional }) {
 
   useEffect(() => {
     const parsedTeethArray = JSON.parse(teethArray);
-    const lastIndex = parsedTeethArray.lastIndexOf(1);
+    const lastIndex = parsedTeethArray.lastIndexOf(999);
 
     if (lastIndex !== -1) {
       const itemsBefore = parsedTeethArray.slice(0, lastIndex);
       const itemsAfter = parsedTeethArray.slice(lastIndex + 1);
 
       const updatedTeethData = teethData.map((tooth) => {
-        if (itemsBefore.includes(tooth.id)) {
+        if (itemsBefore.includes(tooth.id) && itemsAfter.includes(tooth.id)) {
+          return {
+            ...tooth,
+            fill: "purple",
+            title: `${service} - ${additional}`,
+          };
+        } else if (itemsBefore.includes(tooth.id)) {
           // If the tooth id is in teethArray, update the fill to red
           return { ...tooth, fill: "red", title: service };
         } else if (itemsAfter.includes(tooth.id)) {
@@ -57,50 +63,27 @@ function TeethChart({ teethArray, service, additional }) {
       });
 
       setTeethData(updatedTeethData);
-
-      console.log("Items before:", itemsBefore);
-      console.log("Items after:", itemsAfter);
     } else {
       console.log("No '1' found in the array.");
     }
   }, [teethArray, service, additional]);
 
-  //   const teethData = [
-  //     { id: "Tooth1", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth2", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth3", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth4", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth5", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth6", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth7", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth8", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth9", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth10", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth11", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth12", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth13", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth14", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth15", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth16", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth17", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth18", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth19", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth20", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth21", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth22", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth23", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth24", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth25", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth26", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth27", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth28", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth29", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth30", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth31", fill: "#FFFFFF", title: "this is a teeth" },
-  //     { id: "Tooth32", fill: "#FFFFFF", title: "this is a teeth" },
-  //   ];
   return (
     <div className="">
+      <div className="flex flex-col items-start m-2 w-full gap-1">
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-4 w-4 bg-blue-600 rounded-lg"></div>
+          <p className="text-xs">{service}</p>
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-4 w-4 bg-red-600 rounded-lg"></div>
+          <p className="text-xs">{additional}</p>
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-4 w-4 bg-purple-600 rounded-lg"></div>
+          <p className="text-xs">{`${service} - ${additional}`}</p>
+        </div>
+      </div>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

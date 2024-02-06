@@ -36,26 +36,31 @@ const AppointmentHistoryPage = () => {
     const incrementedIndexes = selectedToothIndexes.map((index) => index + 1);
     const incrementedIndexes2 = selectedToothIndexes2.map((index) => index + 1);
 
-    const combination = [
-      ...incrementedIndexes, // Elements of array1
-      1, // Number 1 to be inserted
-      ...incrementedIndexes2, // Elements of array2
-    ];
+    if (incrementedIndexes.length > 0 || incrementedIndexes2.length > 0) {
+      const combination = [
+        ...incrementedIndexes, // Elements of array1
+        999, // Number 1 to be inserted
+        ...incrementedIndexes2, // Elements of array2
+      ];
 
-    // // Send the array as the body of the POST request using Axios
-    axios
-      .post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
-        tooth_index: combination,
-      })
-      .then((response) => {
-        if (response.data.message === "Tooth name updated successfully") {
-          alert("Tooth Name Set Successful");
-          window.location.reload();
-        }
-      })
-      .catch((error) => {
-        console.error("Error confirming selection:", error);
-      });
+      // Send the array as the body of the POST request using Axios
+      axios
+        .post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
+          tooth_index: combination,
+        })
+        .then((response) => {
+          if (response.data.message === "Tooth name updated successfully") {
+            alert("Tooth Name Set Successful");
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error("Error confirming selection:", error);
+        });
+    } else {
+      // Handle the case where both arrays are empty
+      alert("Please select at least one service.");
+    }
 
     handleCloseModal();
     setSelectedToothIndexes([]);
