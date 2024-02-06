@@ -54,10 +54,10 @@ function TeethChart({ teethArray, service, additional }) {
           };
         } else if (itemsBefore.includes(tooth.id)) {
           // If the tooth id is in teethArray, update the fill to red
-          return { ...tooth, fill: "red", title: service };
+          return { ...tooth, fill: "red", title: additional };
         } else if (itemsAfter.includes(tooth.id)) {
           // If the tooth id is in teethArray, update the fill to blue
-          return { ...tooth, fill: "blue", title: additional };
+          return { ...tooth, fill: "blue", title: service };
         }
         return tooth;
       });
