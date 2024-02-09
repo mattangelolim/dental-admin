@@ -37,6 +37,22 @@ function Services() {
   };
 
   const handleAddService = async () => {
+    if (
+      newService.service_name === "" ||
+      newService.service_cost === "" ||
+      newService.estimated_time === "" ||
+      newService.description === ""
+    ) {
+      toast.error("Please fill in all the fields before adding the service.");
+      return;
+    }
+
+    const costAsNumber = parseFloat(newService.service_cost);
+    if (isNaN(costAsNumber)) {
+      toast.error("Service cost must be a valid number.");
+      return;
+    }
+
     try {
       const responseCreate = await axios.post(
         "https://13.211.204.176/add/dental/service",

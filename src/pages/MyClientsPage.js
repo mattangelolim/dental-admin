@@ -47,7 +47,7 @@ const MyClientsPage = () => {
         {userList.length === 0 ? (
           <p className="border-2 w-full p-2 rounded-lg">No listed clients.</p>
         ) : (
-          <div className=" w-full">
+          <div className=" w-full h-[34rem]">
             <DataGrid
               slots={{
                 toolbar: GridToolbar,
