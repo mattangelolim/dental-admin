@@ -45,22 +45,33 @@ function TeethChart({ teethArray, service, additional }) {
       const itemsBefore = parsedTeethArray.slice(0, lastIndex);
       const itemsAfter = parsedTeethArray.slice(lastIndex + 1);
 
-      const updatedTeethData = teethData.map((tooth) => {
-        if (itemsBefore.includes(tooth.id) && itemsAfter.includes(tooth.id)) {
-          return {
-            ...tooth,
-            fill: "purple",
-            title: `${service} - ${additional}`,
-          };
-        } else if (itemsBefore.includes(tooth.id)) {
-          return { ...tooth, fill: "blue", title: service };
-        } else if (itemsAfter.includes(tooth.id)) {
-          return { ...tooth, fill: "red", title: additional };
-        }
-        return tooth;
-      });
+      if (additional) {
+        const updatedTeethData = teethData.map((tooth) => {
+          if (itemsBefore.includes(tooth.id) && itemsAfter.includes(tooth.id)) {
+            return {
+              ...tooth,
+              fill: "purple",
+              title: `${service} - ${additional}`,
+            };
+          } else if (itemsBefore.includes(tooth.id)) {
+            return { ...tooth, fill: "blue", title: service };
+          } else if (itemsAfter.includes(tooth.id)) {
+            return { ...tooth, fill: "red", title: additional };
+          }
+          return tooth;
+        });
 
-      setTeethData(updatedTeethData);
+        setTeethData(updatedTeethData);
+      } else {
+        const updatedTeethData = teethData.map((tooth) => {
+          if (itemsBefore.includes(tooth.id)) {
+            return { ...tooth, fill: "blue", title: service };
+          }
+          return tooth;
+        });
+
+        setTeethData(updatedTeethData);
+      }
     } else {
       console.log("No '1' found in the array.");
     }
@@ -69,18 +80,27 @@ function TeethChart({ teethArray, service, additional }) {
   return (
     <div className="">
       <div className="flex flex-col items-start m-2 w-full gap-1">
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-4 w-4 bg-blue-600 rounded-lg"></div>
-          <p className="text-xs">{service}</p>
-        </div>
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-4 w-4 bg-red-600 rounded-lg"></div>
-          <p className="text-xs">{additional}</p>
-        </div>
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-4 w-4 bg-purple-600 rounded-lg"></div>
-          <p className="text-xs">{`${service} - ${additional}`}</p>
-        </div>
+        {additional ? (
+          <>
+            <div className="flex items-center justify-center gap-2">
+              <div className="h-4 w-4 bg-blue-600 rounded-lg"></div>
+              <p className="text-xs">{service}</p>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <div className="h-4 w-4 bg-red-600 rounded-lg"></div>
+              <p className="text-xs">{additional}</p>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <div className="h-4 w-4 bg-purple-600 rounded-lg"></div>
+              <p className="text-xs">{`${service} - ${additional}`}</p>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-center gap-2">
+            <div className="h-4 w-4 bg-blue-600 rounded-lg"></div>
+            <p className="text-xs">{service}</p>
+          </div>
+        )}
       </div>
       <svg
         version="1.1"
