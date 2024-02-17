@@ -220,100 +220,105 @@ const AppointmentHistoryPage = () => {
                   bgcolor: "background.paper",
                   boxShadow: 24,
                   p: 4,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(16, 1fr)",
+                  // display: "grid",
+                  // gridTemplateColumns: "repeat(16, 1fr)",
                   gap: 1,
                   // border: "2px solid red",
-                  width: "80%",
+                  width: "85%",
                   borderRadius: 2,
                 }}
               >
-                <div className="flex flex-col justify-center items-center  w-full">
-                  <div className="flex flex-col justify-center items-center  w-full">
+                <div className="flex flex-col justify-center items-center gap-10 w-full ">
+                  <div className="flex flex-col justify-center items-center  w-full ">
                     {selectedRowId &&
                       appointmentHistory
                         .filter((item) => item.id === selectedRowId)
                         .map((item, index) => (
-                          <div key={index}>
-                            <div className="flex justify-between items-center">
-                              <p>{item.service}</p>
-                              <Button
-                                variant="outlined"
-                                onClick={() =>
-                                  setSelectedToothIndexes(
-                                    Array.from(
-                                      { length: 32 },
-                                      (_, index) => index
-                                    )
-                                  )
-                                }
-                              >
-                                Select all
-                              </Button>
-                            </div>
-                            <div className="flex flex-row m-2 gap-2 ">
-                              {[...Array(16)].map((_, index) => (
+                          <div className="flex flex-col gap-10 justify-center items-center">
+                            <div key={index}>
+                              <div className="flex justify-between items-center">
+                                <p>{item.service}</p>
                                 <Button
-                                  key={index}
-                                  variant="contained"
-                                  onClick={() => handleNumberClick(index)}
-                                  sx={{
-                                    // mb: 1,
-                                    // ml: 5,
-                                    color: selectedToothIndexes.includes(index)
-                                      ? "blue"
-                                      : "black",
-                                    fontWeight: selectedToothIndexes.includes(
-                                      index
+                                  variant="outlined"
+                                  onClick={() =>
+                                    setSelectedToothIndexes(
+                                      Array.from(
+                                        { length: 32 },
+                                        (_, index) => index
+                                      )
                                     )
-                                      ? "bold"
-                                      : "normal",
-                                    transform: selectedToothIndexes.includes(
-                                      index
-                                    )
-                                      ? "scale(1.2)"
-                                      : "scale(1)",
-                                    transition: "transform 0.3s ease",
-                                  }}
+                                  }
                                 >
-                                  {index + 1}
+                                  Select all
                                 </Button>
-                              ))}
+                              </div>
+                              <div className="flex flex-row gap-2  w-full">
+                                {[...Array(16)].map((_, index) => (
+                                  <Button
+                                    key={index}
+                                    variant="contained"
+                                    onClick={() => handleNumberClick(index)}
+                                    sx={{
+                                      // mb: 1,
+                                      // ml: 5,
+                                      color: selectedToothIndexes.includes(
+                                        index
+                                      )
+                                        ? "blue"
+                                        : "black",
+                                      fontWeight: selectedToothIndexes.includes(
+                                        index
+                                      )
+                                        ? "bold"
+                                        : "normal",
+                                      border: selectedToothIndexes.includes(
+                                        index
+                                      )
+                                        ? "2px solid blue"
+                                        : "",
+                                      transition: "transform 0.3s ease",
+                                    }}
+                                  >
+                                    {index + 1}
+                                  </Button>
+                                ))}
+                              </div>
+                              <div className="flex flex-row gap-2  w-full">
+                                {[...Array(16)].map((_, index) => (
+                                  <Button
+                                    key={index + 16}
+                                    variant="contained"
+                                    onClick={() =>
+                                      handleNumberClick(index + 16)
+                                    }
+                                    sx={{
+                                      // mb: 1,
+                                      // ml: 2,
+                                      color: selectedToothIndexes.includes(
+                                        index + 16
+                                      )
+                                        ? "blue"
+                                        : "black",
+                                      fontWeight: selectedToothIndexes.includes(
+                                        index + 16
+                                      )
+                                        ? "bold"
+                                        : "normal",
+                                      border: selectedToothIndexes.includes(
+                                        index
+                                      )
+                                        ? "2px solid blue"
+                                        : "",
+                                      transition: "transform 0.3s ease",
+                                    }}
+                                  >
+                                    {index + 17}
+                                  </Button>
+                                ))}
+                              </div>
                             </div>
-                            <div className="flex flex-row m-2 gap-2">
-                              {[...Array(16)].map((_, index) => (
-                                <Button
-                                  key={index + 16}
-                                  variant="contained"
-                                  onClick={() => handleNumberClick(index + 16)}
-                                  sx={{
-                                    // mb: 1,
-                                    // ml: 2,
-                                    color: selectedToothIndexes.includes(
-                                      index + 16
-                                    )
-                                      ? "blue"
-                                      : "black",
-                                    fontWeight: selectedToothIndexes.includes(
-                                      index + 16
-                                    )
-                                      ? "bold"
-                                      : "normal",
-                                    transform: selectedToothIndexes.includes(
-                                      index + 16
-                                    )
-                                      ? "scale(1.2)"
-                                      : "scale(1)",
-                                    transition: "transform 0.3s ease",
-                                  }}
-                                >
-                                  {index + 17}
-                                </Button>
-                              ))}
-                            </div>
-
                             {item.AdditionalServices[0] && (
-                              <>
+                              <div>
                                 <div className="flex justify-between items-center">
                                   <p>
                                     {
@@ -335,7 +340,7 @@ const AppointmentHistoryPage = () => {
                                     Select all
                                   </Button>
                                 </div>
-                                <div className="flex flex-row m-2 gap-2 ">
+                                <div className="flex flex-row gap-2  w-full">
                                   {[...Array(16)].map((_, index) => (
                                     <Button
                                       key={index}
@@ -353,10 +358,11 @@ const AppointmentHistoryPage = () => {
                                           selectedToothIndexes2.includes(index)
                                             ? "bold"
                                             : "normal",
-                                        transform:
-                                          selectedToothIndexes2.includes(index)
-                                            ? "scale(1.2)"
-                                            : "scale(1)",
+                                        border: selectedToothIndexes2.includes(
+                                          index
+                                        )
+                                          ? "2px solid blue"
+                                          : "",
                                         transition: "transform 0.3s ease",
                                       }}
                                     >
@@ -364,7 +370,7 @@ const AppointmentHistoryPage = () => {
                                     </Button>
                                   ))}
                                 </div>
-                                <div className="flex flex-row m-2 gap-2">
+                                <div className="flex flex-row gap-2  w-full">
                                   {[...Array(16)].map((_, index) => (
                                     <Button
                                       key={index + 16}
@@ -386,12 +392,11 @@ const AppointmentHistoryPage = () => {
                                           )
                                             ? "bold"
                                             : "normal",
-                                        transform:
-                                          selectedToothIndexes2.includes(
-                                            index + 16
-                                          )
-                                            ? "scale(1.2)"
-                                            : "scale(1)",
+                                        border: selectedToothIndexes2.includes(
+                                          index
+                                        )
+                                          ? "2px solid blue"
+                                          : "",
                                         transition: "transform 0.3s ease",
                                       }}
                                     >
@@ -399,7 +404,7 @@ const AppointmentHistoryPage = () => {
                                     </Button>
                                   ))}
                                 </div>
-                              </>
+                              </div>
                             )}
                           </div>
                         ))}
