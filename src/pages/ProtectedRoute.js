@@ -9,6 +9,7 @@ import ApprovalPage from "./ApprovalPage";
 import AppointmentHistoryPage from "./AppointmentHistoryPage";
 import Services from "./Services";
 import PaymentHistory from "./PaymentHistory";
+import Revenue from "./Revenue";
 
 function ProtectedRoute() {
   const token = Cookies.get("token");
@@ -21,6 +22,7 @@ function ProtectedRoute() {
         <Route index path="History" element={<AppointmentHistoryPage />} />
         <Route index path="Services" element={<Services />} />
         <Route index path="Payment" element={<PaymentHistory />} />
+        <Route index path="Revenue" element={<Revenue />} />
       </Route>
     </Routes>
   );

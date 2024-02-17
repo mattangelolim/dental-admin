@@ -27,6 +27,7 @@ const pages = [
   "History",
   "Services",
   "Payment",
+  "Revenue",
 ];
 const pagesLink = [
   "/Home",
@@ -35,6 +36,7 @@ const pagesLink = [
   "/History",
   "/Services",
   "/Payment",
+  "/Revenue",
 ];
 const settings = ["Logout"];
 
