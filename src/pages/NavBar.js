@@ -20,8 +20,22 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 
-const pages = ["Home", "Client", "Appointment", "History", "Services"];
-const pagesLink = ["/Home", "/Client", "/Appointment", "/History", "/Services"];
+const pages = [
+  "Home",
+  "Client",
+  "Appointment",
+  "History",
+  "Services",
+  "Payment",
+];
+const pagesLink = [
+  "/Home",
+  "/Client",
+  "/Appointment",
+  "/History",
+  "/Services",
+  "/Payment",
+];
 const settings = ["Logout"];
 
 function NavBar() {
