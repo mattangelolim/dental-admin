@@ -1,8 +1,10 @@
 import * as React from "react";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { toast } from "react-toastify";
 
 //Hook form
 import { useForm, Controller } from "react-hook-form";
@@ -28,13 +30,33 @@ export default function PaymentModal() {
   const { control, handleSubmit, formState } = useForm({
     defaultValues: {
       name: null,
-      mode: null,
-      status: null,
+      mop: null,
+      // status: null,
       amount: null,
     },
     mode: "onChange",
   });
-  const onSubmit = (data) => console.log(data);
+  // const onSubmit = (data) => console.log(data);
+
+  const onSubmit = async (data) => {
+    const body = data;
+    try {
+      const response = await axios.post(
+        "https://13.211.204.176/payment/manual",
+        body
+      );
+      handleClose();
+      toast.success("Successfully added.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+      // console.log(response.data);
+    } catch (error) {
+      console.error("Error saving data:", error);
+      toast.error("Error saving data.");
+    }
+    // console.log(body);
+  };
 
   return (
     <div>
@@ -104,15 +126,15 @@ export default function PaymentModal() {
                 )}
               />
               <Controller
-                name="mode"
+                name="mop"
                 control={control}
                 defaultValue=""
-                rules={{
-                  required: {
-                    value: true,
-                    message: "Mode of payment is required",
-                  },
-                }}
+                // rules={{
+                //   required: {
+                //     value: true,
+                //     message: "Mode of payment is required",
+                //   },
+                // }}
                 render={({ field, fieldState: { error } }) => (
                   <TextField
                     {...field}
@@ -131,12 +153,12 @@ export default function PaymentModal() {
                         fontSize: "0.9rem",
                       },
                     }}
-                    error={error !== undefined}
-                    helperText={error?.message || ""}
+                    // error={error !== undefined}
+                    // helperText={error?.message || ""}
                   />
                 )}
               />
-              <Controller
+              {/* <Controller
                 name="status"
                 control={control}
                 defaultValue=""
@@ -168,7 +190,7 @@ export default function PaymentModal() {
                     helperText={error?.message || ""}
                   />
                 )}
-              />
+              /> */}
               <Controller
                 name="amount"
                 control={control}
@@ -177,6 +199,10 @@ export default function PaymentModal() {
                   required: {
                     value: true,
                     message: "Amount is required",
+                  },
+                  pattern: {
+                    value: /^[0-9]*$/,
+                    message: "Amount must be a number",
                   },
                 }}
                 render={({ field, fieldState: { error } }) => (
