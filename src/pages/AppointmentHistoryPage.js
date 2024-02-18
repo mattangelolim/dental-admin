@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -168,7 +169,7 @@ const AppointmentHistoryPage = () => {
         ) : (
           params.row.status === "Approved" &&
           params.row.date &&
-          new Date(params.row.date) <= new Date() && (
+          params.row.date <= dayjs().format("YYYY-MM-DD") && (
             <IconButton onClick={() => handleAddIconClick(params.row.id)}>
               <AddIcon />
             </IconButton>
