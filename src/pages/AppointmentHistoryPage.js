@@ -89,6 +89,7 @@ const AppointmentHistoryPage = () => {
     axios
       .get("https://13.211.204.176/fetch/all/Appointments")
       .then((response) => {
+        console.log(response.data.allAppointments);
         setAppointmentHistory(response.data.allAppointments);
       })
       .catch((error) => {
@@ -104,7 +105,17 @@ const AppointmentHistoryPage = () => {
     { field: "date", headerName: "Date", width: 120 },
     { field: "start_time", headerName: "Start Time", width: 120 },
     // { field: "end_time", headerName: "End Time", width: 120 },
-    { field: "service", headerName: "Service", width: 200 },
+    {
+      field: "service",
+      headerName: "Service",
+      width: 200,
+      renderCell: (params) => (
+        <p>
+          {params.row.service} -{" "}
+          <span className="text-sm">{params.row.service_cost}</span>
+        </p>
+      ),
+    },
     {
       field: "additional_service",
       headerName: "Additional Service",
@@ -112,9 +123,10 @@ const AppointmentHistoryPage = () => {
       renderCell: (params) => (
         <div>
           {params.row.AdditionalServices.map((service) => (
-            <div key={service.service_description}>
-              {service.service_description}
-            </div>
+            <p key={service.service_description}>
+              {service.service_description} -{" "}
+              <span className="text-sm">{service.service_cost}</span>
+            </p>
           ))}
         </div>
       ),
@@ -189,7 +201,7 @@ const AppointmentHistoryPage = () => {
   }));
 
   return (
-    <div className=" flex justify-center items-center bg-white shadow-inner p-2">
+    <div className=" flex justify-center items-center bg-white shadow-inner p-2 ">
       <div className=" w-[75%] flex flex-col gap-4 justify-center items-center">
         <div className=" w-full">
           <p className="text-2xl text-gray-800 font-[Poppins] font-bold">
