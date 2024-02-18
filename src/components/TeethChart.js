@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Teeth.css";
 
-function TeethChart({ teethArray, service, additional }) {
+function TeethChart({ teethArray, service, additional, diagnosis }) {
   const [teethData, setTeethData] = useState([
     { id: 1, fill: "#FFFFFF", title: "this is a 1" },
     { id: 2, fill: "#FFFFFF", title: "this is a 2" },
@@ -78,27 +78,27 @@ function TeethChart({ teethArray, service, additional }) {
   }, [teethArray, service, additional]);
 
   return (
-    <div className="">
+    <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-start m-2 w-full gap-1">
         {additional ? (
           <>
             <div className="flex items-center justify-center gap-2">
               <div className="h-4 w-4 bg-blue-600 rounded-lg"></div>
-              <p className="text-xs">{service}</p>
+              <p className="text-xs font-[Poppins]">{service}</p>
             </div>
             <div className="flex items-center justify-center gap-2">
               <div className="h-4 w-4 bg-red-600 rounded-lg"></div>
-              <p className="text-xs">{additional}</p>
+              <p className="text-xs font-[Poppins]">{additional}</p>
             </div>
             <div className="flex items-center justify-center gap-2">
               <div className="h-4 w-4 bg-purple-600 rounded-lg"></div>
-              <p className="text-xs">{`${service} - ${additional}`}</p>
+              <p className="text-xs font-[Poppins]">{`${service} - ${additional}`}</p>
             </div>
           </>
         ) : (
           <div className="flex items-center justify-center gap-2">
             <div className="h-4 w-4 bg-blue-600 rounded-lg"></div>
-            <p className="text-xs">{service}</p>
+            <p className="text-xs font-[Poppins]">{service}</p>
           </div>
         )}
       </div>
@@ -111,6 +111,7 @@ function TeethChart({ teethArray, service, additional }) {
         viewBox="0 0 450 700"
         enableBackground="new 0 0 450 700"
         xmlSpace="preserve"
+        className="h-[25rem]"
       >
         <g id="toothLabels">
           <text
@@ -1072,6 +1073,12 @@ function TeethChart({ teethArray, service, additional }) {
           </g>
         </g>
       </svg>
+      <div className=" flex flex-col w-full">
+        <p className="font-[Poppins] font-bold text-lg">Doctor's Diagnosis:</p>
+        <div className="border-2 px-2 py-1 rounded-md">
+          <p>{diagnosis}</p>
+        </div>
+      </div>
     </div>
   );
 }

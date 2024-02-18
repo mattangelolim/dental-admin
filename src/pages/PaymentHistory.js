@@ -26,6 +26,7 @@ function PaymentHistory() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
+    { field: "appointment_uid", headerName: "App ID", width: 70 },
     { field: "name", headerName: "Name", width: 150 },
     {
       field: "mop",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import Modal from "@mui/material/Modal";
 import { Box, Button } from "@mui/material";
@@ -14,6 +15,7 @@ const AppointmentHistoryPage = () => {
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [selectedToothIndexes, setSelectedToothIndexes] = useState([]);
   const [selectedToothIndexes2, setSelectedToothIndexes2] = useState([]);
+  const [diagnosis, setDiagnosis] = useState("");
 
   const handleAddIconClick = (rowId) => {
     setSelectedRowId(rowId);
@@ -31,7 +33,12 @@ const AppointmentHistoryPage = () => {
     setSelectedToothIndexes2((prevIndexes) => [...prevIndexes, number]);
   };
 
-  const handleConfirmSelection = () => {
+  const handleDiagnosisChange = (event) => {
+    const newDiagnosis = event.target.value;
+    setDiagnosis(newDiagnosis);
+  };
+
+  const handleConfirmSelection = async () => {
     // Increment each selected number by 1
     const incrementedIndexes = selectedToothIndexes.map((index) => index + 1);
     const incrementedIndexes2 = selectedToothIndexes2.map((index) => index + 1);
@@ -43,19 +50,29 @@ const AppointmentHistoryPage = () => {
         ...incrementedIndexes2, // Elements of array2
       ];
 
-      // Send the array as the body of the POST request using Axios
-      axios
+      // TEETH MODAL
+      await axios
         .post(`https://13.211.204.176/update/toothname?uid=${selectedRowId}`, {
           tooth_index: combination,
         })
-        .then((response) => {
-          if (response.data.message === "Tooth name updated successfully") {
-            alert("Tooth Name Set Successful");
-            window.location.reload();
-          }
-        })
+        // .then((response) => {
+        //   if (response.data.message === "Tooth name updated successfully") {
+        //     alert("Tooth Name Set Successful");
+        //     window.location.reload();
+        //   }
+        // })
         .catch((error) => {
           console.error("Error confirming selection:", error);
+        });
+
+      // DIAGNOSIS
+      await axios
+        .post("https://13.211.204.176/appointment/diagnostic", {
+          id: selectedRowId,
+          doctors_diagnose: diagnosis,
+        })
+        .catch((error) => {
+          console.error("Error confirming diagnosis:", error);
         });
     } else {
       // Handle the case where both arrays are empty
@@ -65,6 +82,7 @@ const AppointmentHistoryPage = () => {
     handleCloseModal();
     setSelectedToothIndexes([]);
     setSelectedRowId(null);
+    window.location.reload();
   };
 
   const getStatusColor = (status) => {
@@ -144,6 +162,7 @@ const AppointmentHistoryPage = () => {
               additional={
                 params.row.AdditionalServices[0]?.service_description || ""
               }
+              diagnosis={params.row.doctors_diagnostic}
             />
           </>
         ) : (
@@ -264,7 +283,7 @@ const AppointmentHistoryPage = () => {
                                   Select all
                                 </Button>
                               </div>
-                              <div className="flex flex-row gap-2  w-full">
+                              <div className="flex flex-row gap-2 w-full">
                                 {[...Array(16)].map((_, index) => (
                                   <Button
                                     key={index}
@@ -317,7 +336,7 @@ const AppointmentHistoryPage = () => {
                                         ? "bold"
                                         : "normal",
                                       border: selectedToothIndexes.includes(
-                                        index
+                                        index + 16
                                       )
                                         ? "2px solid blue"
                                         : "",
@@ -405,7 +424,7 @@ const AppointmentHistoryPage = () => {
                                             ? "bold"
                                             : "normal",
                                         border: selectedToothIndexes2.includes(
-                                          index
+                                          index + 16
                                         )
                                           ? "2px solid blue"
                                           : "",
@@ -420,6 +439,17 @@ const AppointmentHistoryPage = () => {
                             )}
                           </div>
                         ))}
+                  </div>
+                  <div className="w-[93%]">
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Doctor's Diagnosis"
+                      multiline
+                      rows={3}
+                      className="w-full"
+                      value={diagnosis}
+                      onChange={handleDiagnosisChange}
+                    />
                   </div>
                   <div className="mt-2 border-2 bg-blue-500 hover:text-white">
                     <Button
