@@ -30,7 +30,7 @@ export default function PaymentModal() {
   const { control, handleSubmit, formState } = useForm({
     defaultValues: {
       name: null,
-      mop: null,
+      mop: "",
       // status: null,
       amount: null,
     },
@@ -125,7 +125,7 @@ export default function PaymentModal() {
                   />
                 )}
               />
-              <Controller
+              {/* <Controller
                 name="mop"
                 control={control}
                 defaultValue=""
@@ -157,7 +157,7 @@ export default function PaymentModal() {
                     // helperText={error?.message || ""}
                   />
                 )}
-              />
+              /> */}
               {/* <Controller
                 name="status"
                 control={control}

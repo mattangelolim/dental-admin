@@ -26,7 +26,12 @@ function PaymentHistory() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "appointment_uid", headerName: "App ID", width: 70 },
+    {
+      field: "appointment_uid",
+      headerName: "App ID",
+      width: 70,
+      renderCell: (params) => (params.value ? params.value : <p>-</p>),
+    },
     { field: "name", headerName: "Name", width: 150 },
     {
       field: "mop",
@@ -56,6 +61,13 @@ function PaymentHistory() {
     },
 
     { field: "amount", headerName: "Amount", width: 120 },
+    {
+      field: "type",
+      headerName: "Type",
+      width: 120,
+      renderCell: (params) =>
+        params.row.appointment_uid ? <p>Online</p> : <p>Walk-in</p>,
+    },
     {
       field: "button",
       headerName: "Button",
