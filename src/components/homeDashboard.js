@@ -236,24 +236,25 @@ const HomeDashboard = () => {
             </div>
             {/* Add more cards as needed */}
           </div>
-          <div className="flex flex-col items-center justify-center p-2">
-            <div className="flex shadow-md rounded-md border-2 mt-2 p-4 w-full">
+          <div className="flex flex-col items-center justify-center p-2 ">
+            <div className=" shadow-md rounded-md border-2 mt-2 p-4 w-full ">
               <Chart
                 options={lineChartData.options}
                 series={lineChartData.series}
                 type="area"
+                width={"100%"}
                 height={400}
-                width={1000}
+                // width={1000}
               />
             </div>
 
-            <div className="flex justify-center shadow-md rounded-md border-2 mt-2 p-4 w-full">
+            <div className=" justify-center shadow-md rounded-md border-2 mt-2 p-4 w-full">
               <Chart
                 options={barChartData.options}
                 series={barChartData.series}
                 type="bar"
                 height={400}
-                width={1000}
+                // width={1000}
               />
             </div>
           </div>

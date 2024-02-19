@@ -266,8 +266,11 @@ const AppointmentHistoryPage = () => {
                       appointmentHistory
                         .filter((item) => item.id === selectedRowId)
                         .map((item, index) => (
-                          <div className="flex flex-col gap-10 justify-center items-center">
-                            <div key={index}>
+                          <div className="flex flex-col gap-10 justify-center items-center  w-full">
+                            <div
+                              key={index}
+                              className=" w-full flex-col flex gap-2"
+                            >
                               <div className="flex justify-between items-center">
                                 <p>{item.service}</p>
                                 <Button
@@ -284,15 +287,13 @@ const AppointmentHistoryPage = () => {
                                   Select all
                                 </Button>
                               </div>
-                              <div className="flex flex-row gap-2 w-full">
+                              <div className="flex flex-row gap-2 w-full justify-around">
                                 {[...Array(16)].map((_, index) => (
-                                  <Button
+                                  <div
                                     key={index}
-                                    variant="contained"
                                     onClick={() => handleNumberClick(index)}
-                                    sx={{
-                                      // mb: 1,
-                                      // ml: 5,
+                                    className="border-2 border-gray-300 w-[5%] p-1 rounded-lg text-center"
+                                    style={{
                                       color: selectedToothIndexes.includes(
                                         index
                                       )
@@ -312,20 +313,18 @@ const AppointmentHistoryPage = () => {
                                     }}
                                   >
                                     {index + 1}
-                                  </Button>
+                                  </div>
                                 ))}
                               </div>
-                              <div className="flex flex-row gap-2  w-full">
+                              <div className="flex flex-row gap-2 w-full justify-around">
                                 {[...Array(16)].map((_, index) => (
-                                  <Button
-                                    key={index + 16}
-                                    variant="contained"
+                                  <div
+                                    key={index}
                                     onClick={() =>
                                       handleNumberClick(index + 16)
                                     }
-                                    sx={{
-                                      // mb: 1,
-                                      // ml: 2,
+                                    className="border-2 border-gray-300 w-[5%] p-1 rounded-lg text-center"
+                                    style={{
                                       color: selectedToothIndexes.includes(
                                         index + 16
                                       )
@@ -345,12 +344,12 @@ const AppointmentHistoryPage = () => {
                                     }}
                                   >
                                     {index + 17}
-                                  </Button>
+                                  </div>
                                 ))}
                               </div>
                             </div>
                             {item.AdditionalServices[0] && (
-                              <div>
+                              <div className="w-full flex-col flex gap-2">
                                 <div className="flex justify-between items-center">
                                   <p>
                                     {
@@ -372,15 +371,13 @@ const AppointmentHistoryPage = () => {
                                     Select all
                                   </Button>
                                 </div>
-                                <div className="flex flex-row gap-2  w-full">
+                                <div className="flex flex-row gap-2 w-full justify-around">
                                   {[...Array(16)].map((_, index) => (
-                                    <Button
+                                    <div
                                       key={index}
-                                      variant="contained"
                                       onClick={() => handleNumberClick2(index)}
-                                      sx={{
-                                        // mb: 1,
-                                        // ml: 5,
+                                      className="border-2 border-gray-300 w-[5%] p-1 rounded-lg text-center"
+                                      style={{
                                         color: selectedToothIndexes2.includes(
                                           index
                                         )
@@ -399,20 +396,18 @@ const AppointmentHistoryPage = () => {
                                       }}
                                     >
                                       {index + 1}
-                                    </Button>
+                                    </div>
                                   ))}
                                 </div>
-                                <div className="flex flex-row gap-2  w-full">
+                                <div className="flex flex-row gap-2 w-full justify-around">
                                   {[...Array(16)].map((_, index) => (
-                                    <Button
-                                      key={index + 16}
-                                      variant="contained"
+                                    <div
+                                      key={index}
                                       onClick={() =>
                                         handleNumberClick2(index + 16)
                                       }
-                                      sx={{
-                                        // mb: 1,
-                                        // ml: 2,
+                                      className="border-2 border-gray-300 w-[5%] p-1 rounded-lg text-center"
+                                      style={{
                                         color: selectedToothIndexes2.includes(
                                           index + 16
                                         )
@@ -433,7 +428,7 @@ const AppointmentHistoryPage = () => {
                                       }}
                                     >
                                       {index + 17}
-                                    </Button>
+                                    </div>
                                   ))}
                                 </div>
                               </div>
